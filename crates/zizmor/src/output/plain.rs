@@ -104,6 +104,7 @@ pub(crate) fn render_findings(
     show_urls_mode: &ShowAuditUrls,
     render_links_mode: &RenderLinks,
     naches_mode: bool,
+    quiet: bool,
 ) {
     for finding in findings.findings() {
         render_finding(registry, finding, show_urls_mode, render_links_mode);
@@ -135,18 +136,20 @@ pub(crate) fn render_findings(
     }
 
     if findings.findings().is_empty() {
-        if qualifiers.is_empty() {
-            println!("{}", "No findings to report. Good job!".green());
-        } else {
-            println!(
-                "{no_findings} ({qualifiers})",
-                no_findings = "No findings to report. Good job!".green(),
-                qualifiers = qualifiers.join(", ").bold(),
-            );
-        }
+        if !quiet {
+            if qualifiers.is_empty() {
+                println!("{}", "No findings to report. Good job!".green());
+            } else {
+                println!(
+                    "{no_findings} ({qualifiers})",
+                    no_findings = "No findings to report. Good job!".green(),
+                    qualifiers = qualifiers.join(", ").bold(),
+                );
+            }
 
-        if naches_mode {
-            naches();
+            if naches_mode {
+                naches();
+            }
         }
     } else {
         let mut findings_by_severity = HashMap::new();

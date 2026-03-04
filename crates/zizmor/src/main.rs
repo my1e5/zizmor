@@ -784,7 +784,12 @@ async fn run(app: &mut App) -> Result<ExitCode, Error> {
         reg.with(indicatif_layer).init();
     }
 
-    eprintln!("🌈 zizmor v{version}", version = env!("CARGO_PKG_VERSION"));
+    let quiet =
+        app.verbose.tracing_level_filter() < tracing_subscriber::filter::LevelFilter::WARN;
+
+    if !quiet {
+        eprintln!("🌈 zizmor v{version}", version = env!("CARGO_PKG_VERSION"));
+    }
 
     let collection_mode_set = CollectionModeSet::from(app.collect.as_slice());
 
@@ -895,6 +900,7 @@ async fn run(app: &mut App) -> Result<ExitCode, Error> {
             &app.show_audit_urls.into(),
             &app.render_links.into(),
             app.naches,
+            quiet,
         ),
         OutputFormat::Json | OutputFormat::JsonV1 => {
             output::json::v1::output(stdout(), results.findings()).map_err(Error::Output)?
