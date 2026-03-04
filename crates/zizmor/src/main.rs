@@ -785,7 +785,7 @@ async fn run(app: &mut App) -> Result<ExitCode, Error> {
     }
 
     let quiet =
-        app.verbose.tracing_level_filter() < tracing_subscriber::filter::LevelFilter::INFO;
+        app.verbose.tracing_level_filter() < tracing_subscriber::filter::LevelFilter::WARN;
 
     if !quiet {
         eprintln!("🌈 zizmor v{version}", version = env!("CARGO_PKG_VERSION"));

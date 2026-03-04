@@ -101,23 +101,23 @@ fn test_gh_token_github_token_zizmor_github_token_conflict() -> anyhow::Result<(
     Ok(())
 }
 
-/// Test that `--quiet` suppresses the version banner and "no findings" message.
+/// Test that `-qq` suppresses the version banner and "no findings" message.
 #[test]
-fn test_quiet_suppresses_status_output() -> anyhow::Result<()> {
-    // With no findings and --quiet, stdout should be empty.
+fn test_qq_suppresses_status_output() -> anyhow::Result<()> {
+    // With no findings and -qq, stdout should be empty.
     insta::assert_snapshot!(
         zizmor()
-            .args(["--quiet", "--persona=pedantic"])
+            .args(["-qq", "--persona=pedantic"])
             .input(input_under_test("concurrency-limits/cancel-false.yml"))
             .run()?,
         @""
     );
 
-    // With --quiet, the version banner should not appear in stderr.
+    // With -qq, neither the version banner nor the no findings message should appear.
     insta::assert_snapshot!(
         zizmor()
             .output(OutputMode::Both)
-            .args(["--quiet", "--persona=pedantic"])
+            .args(["-qq", "--persona=pedantic"])
             .input(input_under_test("concurrency-limits/cancel-false.yml"))
             .run()?,
         @""
